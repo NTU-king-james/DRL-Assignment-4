@@ -1,7 +1,20 @@
 import gymnasium as gym
 import numpy as np
-
+import torch
+from train import Actor, Critic, PPO
 # Do not modify the input of the 'act' function and the '__init__' function. 
+
+actor = Actor()
+critic = Critic()
+agent  = PPO(actor, critic)
+
+checkpoint = torch.load("best_ppo_model.pth", map_location=agent.device)
+actor.load_state_dict( checkpoint['actor_state_dict'] )
+critic.load_state_dict( checkpoint['critic_state_dict'] )
+
+actor.eval()
+critic.eval()
+
 class Agent(object):
     """Agent that acts randomly."""
     def __init__(self):
@@ -10,4 +23,5 @@ class Agent(object):
         self.action_space = gym.spaces.Box(-2.0, 2.0, (1,), np.float32)
 
     def act(self, observation):
-        return self.action_space.sample()
+        mu = actor(torch.tensor(observation, dtype=torch.float32))
+        return mu.detach().numpy()
