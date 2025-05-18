@@ -8,6 +8,9 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.distributions import Normal
 from torch.utils.data import DataLoader, TensorDataset
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from dmc import make_dmc_env
 # Actor-Critic Networks
 dim_state = 3
 dim_action = 1
@@ -87,8 +90,8 @@ class ReplayBuffer:
 class PPO:
     def __init__(self, lr=3e-4, gamma=0.99, eps_clip=0.2):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.actor = Actor(3, 1).to(self.device)
-        self.critic = Critic(3, 1).to(self.device)
+        self.actor = Actor(5, 1).to(self.device)
+        self.critic = Critic(5, 1).to(self.device)
         self.memory = ReplayBuffer()
         self.optimizer = optim.Adam([
             {'params': self.actor.parameters(), 'lr': lr},
@@ -244,8 +247,11 @@ class PPO:
         plt.savefig('ppo_training_rewards.png')
 
 if __name__ == "__main__":
+    # Action space: Box(-1.0, 1.0, (1,), float64)
+    # Observation space: Box(-inf, inf, (5,), float64)
 
-    env = gym.make("Pendulum-v1", max_episode_steps=200)
+    env_name = "cartpole-balance"
+    env = make_dmc_env(env_name, np.random.randint(0, 1000000), flatten=True, use_pixels=False)
     agent = PPO()
     agent.train(env, num_episodes=10, epochs=100)
     env.close()
