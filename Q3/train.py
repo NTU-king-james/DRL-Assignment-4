@@ -1,6 +1,4 @@
 import argparse
-import datetime
-import gym
 import numpy as np
 import torch
 import torch.nn as nn
