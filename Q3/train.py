@@ -235,7 +235,7 @@ if __name__ == "__main__":
     updates = 0
     best_reward = -float("inf")
     reward_list = []
-    for episode in tqdm(range(1, 2001)):
+    for episode in tqdm(range(1, 3001)):
         state, _ = env.reset()
         episode_reward = 0
         done = False
