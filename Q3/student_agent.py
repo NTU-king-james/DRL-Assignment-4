@@ -5,7 +5,7 @@ import torch
 # Do not modify the input of the 'act' function and the '__init__' function. 
 
 agent = GaussianPolicy(67, 21, hidden_size=512)
-agent.load_state_dict(torch.load("best_policy_1300.pth", map_location='cpu'))
+agent.load_state_dict(torch.load("best_policy_1500.pth", map_location='cpu'))
 agent.eval()
 
 class Agent(object):
