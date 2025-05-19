@@ -13,6 +13,7 @@ import os, sys
 from tqdm import tqdm
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dmc import make_dmc_env
+
 # Utils
 
 def soft_update(target, source, tau):
